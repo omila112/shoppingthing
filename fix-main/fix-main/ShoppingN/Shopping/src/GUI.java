@@ -13,19 +13,19 @@
         private final WestminsterShoppingManager shoppingManager;
 
         private static final String WINDOW_TITLE = "Westminster Shopping Centre";
+        private static final String SHOPPING_CART_TITLE = "Shopping cart";
 
         // Sample data and column names for JTable
 
         private static final String[] COLUMN_NAMES = {"Product ID", "Name", "Category", "Price(£)", "info"};
 
-        JFrame f = new JFrame(WINDOW_TITLE);
+        public JFrame f = new JFrame(WINDOW_TITLE);
         final JPanel mainPanel = new JPanel();
         final JPanel headerPanel = new JPanel(new FlowLayout());
         final JPanel tablePanel = new JPanel();
         JPanel detailsPanel = new JPanel();
 
-
-
+        public ShoppingCartJFrame shoppingCartJFrame;
 
         JComboBox<String> cb;
         JTable table;
@@ -43,11 +43,14 @@
 
             // Create "shopping cart" button
             JButton shoppingcart = new JButton("Shopping Cart");
-            shoppingcart.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //ShoppingCart();
-                }
+            shoppingcart.addActionListener(e -> {
+                if (shoppingCartJFrame != null) return;
+                shoppingCartJFrame = new ShoppingCartJFrame(shoppingManager.getShoppingCart());
+
+                shoppingCartJFrame.setVisible(true);
+
+                // We opened a child window, disable parent
+                f.setEnabled(false);
             });
 
             headerPanel.add(label1);
@@ -138,8 +141,8 @@
                 array[i] = new Object[]{
                     product.getProductID(),
                     product.getProductName(),
-                    product.getPrice(),
                     product.getType(),
+                    product.getPrice(),
                     getInfo(product)
                 };
             }
@@ -196,17 +199,16 @@
                         detailsPanel.add(new JLabel("Brand: " + selectedElectronics.getBrand()+"\n"));
                     }
 
+                    JButton cartBtn = new JButton("Add to cart");
+                    cartBtn.addActionListener(e -> {
+                        shoppingManager.getShoppingCart().add(selectedProduct);
+                    });
+                    detailsPanel.add(cartBtn);
 
                     // Repaint and validate the details panel to reflect the changes
                     detailsPanel.revalidate();
                     detailsPanel.repaint();
                 }
             }
-
-        }
-        
-
-
-        public void setShoppingManager(WestminsterShoppingManager shoppingManager){
         }
     }

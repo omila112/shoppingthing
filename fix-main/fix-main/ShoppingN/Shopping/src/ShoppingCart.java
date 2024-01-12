@@ -1,25 +1,35 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ShoppingCart {
-    private List<Product> ListOfProducts;
+    private Map<Product, Integer> products;
 
-    public ShoppingCart(List<Product> listOfProducts) {
-        this.ListOfProducts = listOfProducts;
+    public ShoppingCart() {
+        this.products = new HashMap<>();
     }
-    public void Add(Product product){
-        ListOfProducts.add(product);
 
+    public void add(Product product){
+        products.put(product, products.getOrDefault(product, 0) + 1);
     }
-    public void Remove(String productID){
-        ListOfProducts.remove(productID);
 
+    public int getQty(Product product) {
+        return products.get(product);
     }
-    public double CalculateCost(){
+
+    public Stream<Product> stream() {
+        return products.keySet().stream();
+    }
+
+    public int size() {
+        return products.size();
+    }
+
+    public double calculateCost(){
         double total = 0.0;
 
-        for (Product product : ListOfProducts) {
-            total += product.getPrice();
+        for (Product product : products.keySet()) {
+            final int qty = products.get(product);
+            total += product.getPrice() * qty;
         }
         return total;
     }

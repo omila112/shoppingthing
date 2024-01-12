@@ -7,8 +7,8 @@ import java.io.*;
 
 
 interface  ShoppingManager {
-    void Add();
-    void Remove();
+    void add();
+    void remove();
 
     void SaveList(String Fname, List<Product> products);
 
@@ -21,16 +21,26 @@ public class WestminsterShoppingManager implements ShoppingManager{
     private static final String DATABASE_FILENAME = "Saves.dat";
     public List<Product> ListOfProducts;
     private int MaxItems = 50;
+    private final ShoppingCart shoppingCart = new ShoppingCart();
     private GUI gui;
 
 
     public WestminsterShoppingManager() {
         this.ListOfProducts = new ArrayList<>();
-
     }
+
     public void setGUI(GUI gui) {
         this.gui = gui;
     }
+
+    public GUI getGUI() {
+        return gui;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
     public void Menu(){
         Scanner input = new Scanner(System.in);
         int choice =-1;
@@ -53,10 +63,10 @@ public class WestminsterShoppingManager implements ShoppingManager{
             choice = input.nextInt();
             switch(choice){
                 case 1:
-                    Add();
+                    add();
                     break;
                 case 2:
-                    Remove();
+                    remove();
                     break;
                 case 3:
                     PrintList();
@@ -82,7 +92,7 @@ public class WestminsterShoppingManager implements ShoppingManager{
 
 
     @Override
-    public void Add(){
+    public void add(){
         if(ListOfProducts.size()<MaxItems) {
             Product product = getInput();
             ListOfProducts.add(product);
@@ -100,7 +110,7 @@ public class WestminsterShoppingManager implements ShoppingManager{
 
 
     @Override
-    public void Remove() {
+    public void remove() {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter product to remove");
         String ProductR = input.nextLine();
