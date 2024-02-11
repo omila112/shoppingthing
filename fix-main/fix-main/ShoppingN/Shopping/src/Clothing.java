@@ -1,4 +1,6 @@
+//123jfijaif
 public class Clothing extends Product{
+//ejijtesingin
     private char size;
     private String colour;
 
